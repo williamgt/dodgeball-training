@@ -24,7 +24,7 @@ behaviors:
         strength: 0.1
         demo_path: Demos/ExplorationDemo
     behavioral_cloning:
-      strength: 0.5
+      strength: 0.2
       demo_path: Demos/ExplorationDemo
     max_steps: 200000000
     time_horizon: 64
