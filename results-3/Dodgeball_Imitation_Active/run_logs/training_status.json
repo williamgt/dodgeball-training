@@ -1,0 +1,66 @@
+{
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.0.0",
+        "torch_version": "2.1.1"
+    },
+    "DodgeBall": {
+        "elo": 1200.0,
+        "checkpoints": [
+            {
+                "steps": 2499948,
+                "file_path": "results/Dodgeball_Imitation_Active/DodgeBall/DodgeBall-2499948.onnx",
+                "reward": 0.0,
+                "creation_time": 1700321963.070451,
+                "auxillary_file_paths": [
+                    "results/Dodgeball_Imitation_Active/DodgeBall/DodgeBall-2499948.pt"
+                ]
+            },
+            {
+                "steps": 2599954,
+                "file_path": "results/Dodgeball_Imitation_Active/DodgeBall/DodgeBall-2599954.onnx",
+                "reward": 0.0,
+                "creation_time": 1700322876.115202,
+                "auxillary_file_paths": [
+                    "results/Dodgeball_Imitation_Active/DodgeBall/DodgeBall-2599954.pt"
+                ]
+            },
+            {
+                "steps": 2605592,
+                "file_path": "results/Dodgeball_Imitation_Active/DodgeBall/DodgeBall-2605592.onnx",
+                "reward": 0.0,
+                "creation_time": 1700322924.3860931,
+                "auxillary_file_paths": [
+                    "results/Dodgeball_Imitation_Active/DodgeBall/DodgeBall-2605592.pt"
+                ]
+            },
+            {
+                "steps": 2613433,
+                "file_path": "results/Dodgeball_Imitation_Active/DodgeBall/DodgeBall-2613433.onnx",
+                "reward": 0.5874999826774001,
+                "creation_time": 1700323867.890164,
+                "auxillary_file_paths": [
+                    "results/Dodgeball_Imitation_Active/DodgeBall/DodgeBall-2613433.pt"
+                ]
+            },
+            {
+                "steps": 2699542,
+                "file_path": "results/Dodgeball_Imitation_Active/DodgeBall/DodgeBall-2699542.onnx",
+                "reward": 0.9166666679084301,
+                "creation_time": 1700324850.626241,
+                "auxillary_file_paths": [
+                    "results/Dodgeball_Imitation_Active/DodgeBall/DodgeBall-2699542.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 2699542,
+            "file_path": "results/Dodgeball_Imitation_Active/DodgeBall.onnx",
+            "reward": 0.9166666679084301,
+            "creation_time": 1700324850.626241,
+            "auxillary_file_paths": [
+                "results/Dodgeball_Imitation_Active/DodgeBall/DodgeBall-2699542.pt"
+            ]
+        }
+    }
+}

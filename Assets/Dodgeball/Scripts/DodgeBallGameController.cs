@@ -5,6 +5,8 @@ using UnityEngine;
 using Unity.MLAgents;
 using Random = UnityEngine.Random;
 using TMPro;
+/* using UnityEditor;
+using UnityEngine.UIElements; */
 
 public class DodgeBallGameController : MonoBehaviour
 {
@@ -62,6 +64,12 @@ public class DodgeBallGameController : MonoBehaviour
     public List<GameObject> blueLosersList;
     public List<GameObject> purpleLosersList;
 
+/*     [Header("CORNERS")]
+    [SerializeField]
+    private Transform cornersContainer;
+    private List<Transform> corners;
+    private float cornerReachDistance = 3f; */
+
     [Header("UI Audio")]
     public AudioClip FlagHitClip;
     public AudioClip BallImpactClip1;
@@ -102,6 +110,9 @@ public class DodgeBallGameController : MonoBehaviour
         [HideInInspector]
         public int TeamID;
     }
+
+    [Header("Gamelog")]
+    public GameLogger gameLogger;
 
     private bool m_Initialized;
     public List<PlayerInfo> Team0Players;
@@ -163,6 +174,7 @@ public class DodgeBallGameController : MonoBehaviour
 
         SetActiveLosers(blueLosersList, 0);
         SetActiveLosers(purpleLosersList, 0);
+        /* InitializeCorners(); */
 
         //Poof Particles
         if (usePoofParticlesOnElimination)
@@ -332,6 +344,9 @@ public class DodgeBallGameController : MonoBehaviour
     // End the game, resetting if in training mode and showing a win screen if in game mode.
     public void EndGame(int winningTeam, float delaySeconds = 1.0f)
     {
+        gameLogger = GetComponent<GameLogger>();
+        gameLogger.LogPlayerData(11);
+
         //GAME MODE
         if (ShouldPlayEffects)
         {
@@ -350,6 +365,10 @@ public class DodgeBallGameController : MonoBehaviour
         AudioClip clipToUse1 = winningTeam == 0 ? WinSoundFX1 : LoseSoundFX1;
         AudioClip clipToUse2 = winningTeam == 0 ? WinSoundFX2 : LoseSoundFX2;
         yield return new WaitForSeconds(delaySeconds);
+
+        gameLogger = GetComponent<GameLogger>();
+        gameLogger.LogPlayerData(10); // log win screen start
+
         winTextGO.SetActive(true);
         if (ShouldPlayEffects)
         {
@@ -440,7 +459,27 @@ public class DodgeBallGameController : MonoBehaviour
         }
     }
 
-    //Call this method when a player is hit by a dodgeball
+    // Call this method when a player picks up a dodgeball
+    public void PlayerPickedBall(DodgeBallAgent picker)
+    {
+        // When one player picks up a ball, the other player is punished to enforces new strategies
+        if (picker.teamID == 0)
+        {
+            foreach (var player in Team1Players)
+            {
+                player.Agent.AddReward(-.05f);
+            }
+        }
+        else
+        {
+            foreach (var player in Team0Players)
+            {
+                player.Agent.AddReward(-.05f);
+            }
+        }
+    }
+
+    // Call this method when a player is hit by a dodgeball
     public void PlayerWasHit(DodgeBallAgent hit, DodgeBallAgent thrower)
     {
         //SET AGENT/TEAM REWARDS HERE
@@ -449,6 +488,9 @@ public class DodgeBallGameController : MonoBehaviour
         var HitAgentGroup = hitTeamID == 1 ? m_Team1AgentGroup : m_Team0AgentGroup;
         var ThrowAgentGroup = hitTeamID == 1 ? m_Team0AgentGroup : m_Team1AgentGroup;
         float hitBonus = GameMode == GameModeType.Elimination ? EliminationHitBonus : CTFHitBonus;
+
+        //Get the game logger
+        gameLogger = GetComponent<GameLogger>();
 
         // Always drop the flag
         if (DropFlagImmediately)
@@ -479,6 +521,18 @@ public class DodgeBallGameController : MonoBehaviour
                     HitAgentGroup.EndGroupEpisode();
 
                     print($"Team {throwTeamID} Won");
+                    hit.HitPointsRemaining--; // Ensure that player hitpoints reaches 0 for logging purposes 
+
+                    //Log the hit  
+                    if (hit.teamID == 0) { logHit(hit, thrower, 4); }
+                    else if (hit.teamID == 1) { logHit(hit, thrower, 3); }
+
+                    //Log the results of the game
+                    gameLogger.winner = thrower.teamID; //Who won?
+                    gameLogger.blueLives = Team0Players[0].Agent.HitPointsRemaining; //How many lives does Blue have left?
+                    gameLogger.purpleLives = Team1Players[0].Agent.HitPointsRemaining; //How many lives does Purple have left?
+                    gameLogger.LogGameInfo(); //Log this information to file before starting reset coroutine
+
                     hit.DropAllBalls();
                     if (ShouldPlayEffects)
                     {
@@ -506,10 +560,49 @@ public class DodgeBallGameController : MonoBehaviour
         else
         {
             hit.HitPointsRemaining--;
+
+            // Log the hit  
+            if (hit.teamID == 0) { logHit(hit, thrower, 4); }
+            else if (hit.teamID == 1) { logHit(hit, thrower, 3); }
+
             thrower.AddReward(hitBonus);
         }
     }
 
+    public void logHit(DodgeBallAgent hit, DodgeBallAgent thrower, int n)
+    {
+        gameLogger = GetComponent<GameLogger>();
+        gameLogger.hit = hit.teamID;
+        gameLogger.thrower = thrower.teamID;
+        gameLogger.blueLives = Team0Players[0].Agent.HitPointsRemaining;
+        gameLogger.purpleLives = Team1Players[0].Agent.HitPointsRemaining;
+        gameLogger.blueBalls = Team0Players[0].Agent.currentNumberOfBalls;
+        gameLogger.LogPlayerData(n);
+    }
+
+/*     private void InitializeCorners()
+    {
+        // Code to initialize the waypoints list
+        corners = new List<Transform>();
+        for (int i = 0; i < cornersContainer.childCount; i++)
+        {
+            corners.Add(cornersContainer.GetChild(i));
+        }
+    }
+
+    public int GetAgentCornerIndex(Transform agentTransform)
+    {
+        for (int i = 0; i < corners.Count; i++)
+        {
+            float distance = Vector3.Distance(agentTransform.position, corners[i].position);
+            if (distance < cornerReachDistance)
+            {
+                return i + 1;
+            }
+        }
+        return 0;
+    }
+ */
     //Call this method when an agent picks up an enemy flag.
     public void FlagWasTaken(DodgeBallAgent agent)
     {
@@ -675,6 +768,9 @@ public class DodgeBallGameController : MonoBehaviour
 
         SetActiveLosers(blueLosersList, 0);
         SetActiveLosers(purpleLosersList, 0);
+
+        gameLogger = GetComponent<GameLogger>();
+        gameLogger.LogPlayerData(6);
     }
 
     // Update is called once per frame
