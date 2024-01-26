@@ -1,5 +1,6 @@
 Timestamp,EventType,BlueBallsLeft,PurpleBallsLeft,BlueLives,PurpleLives
 16:40:50.895,S,0,0,3,3
+16:40:50.895,ResetScene,0,0,3,3
 16:40:53.010,PurplePickedUpBall,0,1,3,3
 16:40:53.257,BluePickedUpBall,1,1,3,3
 16:40:53.496,PurpleDash,1,1,3,3

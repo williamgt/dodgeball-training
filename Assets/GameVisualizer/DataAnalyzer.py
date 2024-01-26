@@ -140,20 +140,44 @@ class DataAnalyzer:
         # Loop through DataFrame and calculate duration of each sequence of LivesLeft being 3
         in_sequence = False
         sequence_start = None
-        total_duration = pd.Timedelta(0)
+        total_duration = pd.Timedelta(0).total_seconds()
         for i, row in self.df.iterrows():
             if logic_op(row, True) and not in_sequence:
                 # Start of new sequence
                 in_sequence = True
-                sequence_start = row['Timestamp']
+                sequence_start = row['elapsed_time']
             elif logic_op(row, False) and in_sequence:
                 # End of sequence
                 in_sequence = False
-                sequence_end = row['Timestamp']
+                sequence_end = row['elapsed_time']
                 sequence_duration = sequence_end - sequence_start
                 total_duration += sequence_duration
 
-        print(f'Total seconds that '+str(column)+' '+text+': '+str(total_duration.total_seconds()))
+        # print(f'Total seconds that '+str(column)+' '+text+': '+str(total_duration.total_seconds()))
+        print(f'Total seconds that '+str(column)+' '+text+': '+str(round(total_duration, 3)))
+    
+
+    def count_event_occurences(self, event):
+        return self.df['EventType'].value_counts()[event]
+    
+    
+    def calculate_precision(self, player):
+        precision = None
+        if player == 'Blue':
+            precision = self.count_event_occurences('HitPurple')/self.count_event_occurences('BlueThrewBall')
+        elif player == 'Purple':
+            precision = self.count_event_occurences('HitBlue')/self.count_event_occurences('PurpleThrewBall')
+        return precision
+    
+
+    def print_event_count(self, event='BlueThrewBall'):
+        count = self.count_event_occurences(event)
+        print(f'{event} occurred {count} times')
+    
+
+    def print_precision(self, player='Blue'):
+        precision = self.calculate_precision(player)
+        print(f'{player} had a precision of {round(precision * 100, 2)} %')
 
 
 if __name__ == "__main__":
@@ -173,19 +197,35 @@ if __name__ == "__main__":
                 da.save_data()
 
 
-
     da.print_data()
     # da.print_corner()
 
-    da.plot(columns=['BlueBallsLeft'])
-    da.plot(columns=['PurpleBallsLeft'])
-    da.plot(columns=['BlueLives'])
-    da.plot(columns=['PurpleLives'])
+    # da.plot(columns=['BlueLives'])
+    # da.plot(columns=['PurpleLives'])
+    # da.plot(columns=['BlueBallsLeft'])
+    # da.plot(columns=['PurpleBallsLeft'])
     # da.plot(columns=['Corner'])
 
     # Elapsed time prints (total duration a given field is a given condition)
+    da.elapsed_time(column="BlueLives")
+    da.elapsed_time(column="PurpleLives")
+    da.elapsed_time(column="BlueBallsLeft")
+    da.elapsed_time(column="PurpleBallsLeft")
     # da.elapsed_time(column="Corner")
-    # da.elapsed_time(column="PlayerLives")
-    # da.elapsed_time(column="EnemyLives")
-    # da.elapsed_time(column="BallsLeft")
+
+    print()
+
+    # Count event prints how many times each event occurs
+    da.print_event_count(event="BluePickedUpBall")
+    da.print_event_count(event="PurplePickedUpBall")
+    da.print_event_count(event="BlueThrewBall")
+    da.print_event_count(event="PurpleThrewBall")
+    da.print_event_count(event="HitBlue")
+    da.print_event_count(event="HitPurple")
+
+    print()
+
+    # Precision
+    da.print_precision(player="Blue")
+    da.print_precision(player="Purple")
 
