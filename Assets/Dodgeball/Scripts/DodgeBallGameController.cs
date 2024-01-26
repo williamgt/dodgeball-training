@@ -111,8 +111,8 @@ public class DodgeBallGameController : MonoBehaviour
         public int TeamID;
     }
 
-    [Header("Gamelog")]
-    public GameLogger gameLogger;
+    /* [Header("Gamelog")]
+    public GameLogger gameLogger; */
 
     private bool m_Initialized;
     public List<PlayerInfo> Team0Players;
@@ -344,8 +344,8 @@ public class DodgeBallGameController : MonoBehaviour
     // End the game, resetting if in training mode and showing a win screen if in game mode.
     public void EndGame(int winningTeam, float delaySeconds = 1.0f)
     {
-        gameLogger = GetComponent<GameLogger>();
-        gameLogger.LogPlayerData(11);
+        /* gameLogger = GetComponent<GameLogger>();
+        gameLogger.LogPlayerData(11); */
 
         //GAME MODE
         if (ShouldPlayEffects)
@@ -366,8 +366,8 @@ public class DodgeBallGameController : MonoBehaviour
         AudioClip clipToUse2 = winningTeam == 0 ? WinSoundFX2 : LoseSoundFX2;
         yield return new WaitForSeconds(delaySeconds);
 
-        gameLogger = GetComponent<GameLogger>();
-        gameLogger.LogPlayerData(10); // log win screen start
+        /* gameLogger = GetComponent<GameLogger>();
+        gameLogger.LogPlayerData(10); // log win screen start */
 
         winTextGO.SetActive(true);
         if (ShouldPlayEffects)
@@ -490,7 +490,7 @@ public class DodgeBallGameController : MonoBehaviour
         float hitBonus = GameMode == GameModeType.Elimination ? EliminationHitBonus : CTFHitBonus;
 
         //Get the game logger
-        gameLogger = GetComponent<GameLogger>();
+        /* gameLogger = GetComponent<GameLogger>(); */
 
         // Always drop the flag
         if (DropFlagImmediately)
@@ -523,7 +523,7 @@ public class DodgeBallGameController : MonoBehaviour
                     print($"Team {throwTeamID} Won");
                     hit.HitPointsRemaining--; // Ensure that player hitpoints reaches 0 for logging purposes 
 
-                    //Log the hit  
+                    /* //Log the hit  
                     if (hit.teamID == 0) { logHit(hit, thrower, 4); }
                     else if (hit.teamID == 1) { logHit(hit, thrower, 3); }
 
@@ -531,7 +531,7 @@ public class DodgeBallGameController : MonoBehaviour
                     gameLogger.winner = thrower.teamID; //Who won?
                     gameLogger.blueLives = Team0Players[0].Agent.HitPointsRemaining; //How many lives does Blue have left?
                     gameLogger.purpleLives = Team1Players[0].Agent.HitPointsRemaining; //How many lives does Purple have left?
-                    gameLogger.LogGameInfo(); //Log this information to file before starting reset coroutine
+                    gameLogger.LogGameInfo(); //Log this information to file before starting reset coroutine */
 
                     hit.DropAllBalls();
                     if (ShouldPlayEffects)
@@ -562,14 +562,14 @@ public class DodgeBallGameController : MonoBehaviour
             hit.HitPointsRemaining--;
 
             // Log the hit  
-            if (hit.teamID == 0) { logHit(hit, thrower, 4); }
-            else if (hit.teamID == 1) { logHit(hit, thrower, 3); }
+            /* if (hit.teamID == 0) { logHit(hit, thrower, 4); }
+            else if (hit.teamID == 1) { logHit(hit, thrower, 3); } */
 
             thrower.AddReward(hitBonus);
         }
     }
 
-    public void logHit(DodgeBallAgent hit, DodgeBallAgent thrower, int n)
+/*     public void logHit(DodgeBallAgent hit, DodgeBallAgent thrower, int n)
     {
         gameLogger = GetComponent<GameLogger>();
         gameLogger.hit = hit.teamID;
@@ -578,7 +578,7 @@ public class DodgeBallGameController : MonoBehaviour
         gameLogger.purpleLives = Team1Players[0].Agent.HitPointsRemaining;
         gameLogger.blueBalls = Team0Players[0].Agent.currentNumberOfBalls;
         gameLogger.LogPlayerData(n);
-    }
+    } */
 
 /*     private void InitializeCorners()
     {
@@ -769,8 +769,8 @@ public class DodgeBallGameController : MonoBehaviour
         SetActiveLosers(blueLosersList, 0);
         SetActiveLosers(purpleLosersList, 0);
 
-        gameLogger = GetComponent<GameLogger>();
-        gameLogger.LogPlayerData(6);
+        /* gameLogger = GetComponent<GameLogger>();
+        gameLogger.LogPlayerData(6); */
     }
 
     // Update is called once per frame

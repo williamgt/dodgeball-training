@@ -61,8 +61,8 @@ public class DodgeBallAgent : Agent
     [HideInInspector]
     public int HitPointsRemaining; // how many more times can we be hit
 
-    [Header("Gamelog")]
-    public GameLogger m_gameLogger;
+    /* [Header("Gamelog")]
+    public GameLogger m_gameLogger; */
 
     [Header("OTHER")] public bool m_PlayerInitialized;
     [HideInInspector]
@@ -121,7 +121,7 @@ public class DodgeBallAgent : Agent
         input = GetComponent<DodgeBallAgentInput>();
         m_GameController = GetComponentInParent<DodgeBallGameController>();
 
-        m_gameLogger = GetComponent<GameLogger>();
+        /* m_gameLogger = GetComponent<GameLogger>(); */
 
         //Make sure ThrowController is set up to play sounds
         ThrowController.PlaySound = m_GameController.ShouldPlayEffects;
@@ -387,14 +387,14 @@ public class DodgeBallAgent : Agent
             if (m_DashInput > 0 && m_DashCoolDownReady)
             {
                 m_CubeMovement.Dash(moveDir);
-                if (m_BehaviorParameters.TeamId == 0)
+                /* if (m_BehaviorParameters.TeamId == 0)
                 {
                     m_gameLogger.LogPlayerData(8); // Log player dash
                 }
                 else if (m_BehaviorParameters.TeamId == 1)
                 {
                     m_gameLogger.LogPlayerData(12); // Log enemy/purple dash
-                }
+                } */
             }
         }
     }
@@ -410,7 +410,7 @@ public class DodgeBallAgent : Agent
             SetActiveBalls(currentNumberOfBalls);
 
             // Log data
-            if (m_BehaviorParameters.TeamId == 0)
+            /* if (m_BehaviorParameters.TeamId == 0)
             {
                 m_gameLogger.blueBalls = currentNumberOfBalls;
                 m_gameLogger.LogPlayerData(1); // Log player throw
@@ -418,7 +418,7 @@ public class DodgeBallAgent : Agent
             else if (m_BehaviorParameters.TeamId == 1)
             {
                 m_gameLogger.LogPlayerData(5); // Log enemy throw
-            }
+            } */
         }
     }
 
@@ -645,7 +645,7 @@ public class DodgeBallAgent : Agent
         db.gameObject.SetActive(false);
 
         // Log data
-        if (m_BehaviorParameters.TeamId == 0)
+        /* if (m_BehaviorParameters.TeamId == 0)
         {
             m_gameLogger.blueBalls = currentNumberOfBalls;
             m_gameLogger.LogPlayerData(2); // PlayerPickedUpBall
@@ -653,7 +653,7 @@ public class DodgeBallAgent : Agent
         else
         {
             m_gameLogger.LogPlayerData(9); // EnemyPickedUpBall
-        }
+        } */
     }
 
     //Used for human input
