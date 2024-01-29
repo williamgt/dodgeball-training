@@ -467,14 +467,14 @@ public class DodgeBallGameController : MonoBehaviour
         {
             foreach (var player in Team1Players)
             {
-                player.Agent.AddReward(-.05f);
+                player.Agent.AddReward(-.2f);
             }
         }
         else
         {
             foreach (var player in Team0Players)
             {
-                player.Agent.AddReward(-.05f);
+                player.Agent.AddReward(-.2f);
             }
         }
     }
