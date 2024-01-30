@@ -210,7 +210,7 @@ public class DodgeBallGameController : MonoBehaviour
     void FixedUpdate()
     {
         if (!m_Initialized) return;
-
+        
         //RESET SCENE IF WE MaxEnvironmentSteps
         m_ResetTimer += 1;
         if (m_ResetTimer >= MaxEnvironmentSteps)
@@ -219,6 +219,27 @@ public class DodgeBallGameController : MonoBehaviour
             m_Team1AgentGroup.GroupEpisodeInterrupted();
             ResetScene();
         }
+
+        // Debug.Log(float.Parse(Team0Players[0].Agent.transform.position.x));
+        /* Debug.Log("x");
+        Debug.Log(Team0Players[0].Agent.transform.localPosition.x);
+        Debug.Log("z");
+        Debug.Log(Team0Players[0].Agent.transform.localPosition.z); */
+
+
+        // Negative reward if agent is in the middle of the court
+        if (Team0Players[0].Agent.transform.localPosition.x > 18 && Team0Players[0].Agent.transform.localPosition.x < 23)
+        {
+            Team0Players[0].Agent.AddReward(-.01f);
+            
+        }
+        if (Team1Players[0].Agent.transform.localPosition.x > 18 && Team1Players[0].Agent.transform.localPosition.x < 23)
+        {
+            Team1Players[0].Agent.AddReward(-.01f);
+        }
+
+        // Team0Players[0].Agent.transform.position.z > 0
+        // Team1Players[0].Agent.transform.position.z > 0
     }
 
     //Show a countdown UI when the round starts
@@ -467,14 +488,14 @@ public class DodgeBallGameController : MonoBehaviour
         {
             foreach (var player in Team1Players)
             {
-                player.Agent.AddReward(-.2f);
+                player.Agent.AddReward(0f);
             }
         }
         else
         {
             foreach (var player in Team0Players)
             {
-                player.Agent.AddReward(-.2f);
+                player.Agent.AddReward(0f);
             }
         }
     }
