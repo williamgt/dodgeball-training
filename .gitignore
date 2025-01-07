@@ -50,6 +50,7 @@ upm-ci.log
 
 # Visual Studio Code settings directory
 .vscode/
+.vsconfig
 
 # Gradle cache directory
 .gradle/
