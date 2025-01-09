@@ -1,0 +1,46 @@
+behaviors:
+  DodgeBall:
+    trainer_type: ppo
+    hyperparameters:
+      batch_size: 2048
+      buffer_size: 20480
+      learning_rate: 0.0003
+      beta: 0.005
+      epsilon: 0.2
+      lambd: 0.95
+      num_epoch: 3
+      learning_rate_schedule: constant
+    network_settings:
+      normalize: false
+      hidden_units: 512
+      num_layers: 3
+      vis_encode_type: simple
+      goal_conditioning_type: none
+    reward_signals:
+      extrinsic:
+        gamma: 0.999
+        strength: 1.0
+      curiosity:
+        gamma: 0.99
+        strength: 0.02
+        learning_rate: 3.0e-4
+    keep_checkpoints: 40
+    checkpoint_interval: 2000000
+    max_steps: 500000000
+    time_horizon: 1000
+    summary_freq: 50000
+    threaded: false
+    self_play:
+      save_steps: 500000
+      team_change: 1000000
+      swap_steps: 200000
+      window: 10
+      play_against_latest_model_ratio: 0.5
+      initial_elo: 1200.0
+
+environment_parameters:
+  ball_hold_bonus: 0.0005 #Should not be larger than the default hit bonus which is 0.1! and NB this will be multiplied with amount of balls held for each step(?) which is set to 5000, potentially giving very large (5000 * 4 * bonus) reward, keep in mind. set to 0.000005 for guaranteed not get larger than hit one reward
+
+# Enable when training from a build or in the cloud.
+# env_settings:
+#   num_envs: 3
