@@ -470,8 +470,10 @@ public class DodgeBallGameController : MonoBehaviour
                 // The current agent was just killed and is the final agent
                 if (hit.HitPointsRemaining == 1 || m_NumberOfBluePlayersRemaining == 0 || m_NumberOfPurplePlayersRemaining == 0 || hit.gameObject == PlayerGameObject)
                 {
+                    //This for POCA
                     //ThrowAgentGroup.AddGroupReward(2.0f - m_TimeBonus * (m_ResetTimer / MaxEnvironmentSteps));
                     //HitAgentGroup.AddGroupReward(-1.0f);
+                    //This for PPO
                     thrower.AddReward(2.0f - m_TimeBonus * (m_ResetTimer / MaxEnvironmentSteps));
                     hit.AddReward(-1.0f);
                     
